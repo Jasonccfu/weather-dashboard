@@ -24,13 +24,13 @@
     <header class="container-fluid text-center text-white bg-dark p-1">
       <h1>Weather Dashboard</h1>
     </header>
-
+    <!-- USER SEARCH -->
     <main>
       <section>
         <div>
           <h1>Search for a City:</h1>
           <input id="cityName" placeholder="Enter a city" />
-          <button id="cityButton">Search</button>
+          <button id="searchButton">Search</button>
           <!-- <button id="cityClearnButton">Clear</button> -->
         </div>
       </section>
@@ -39,10 +39,15 @@
         <ul id="historySearch"></ul>
       </section>
     </main>
-
-    <aside>
-      <h1>Result</h1>
-    </aside>
+    <!-- CURRENT WEATHER -->
+    <div>
+      <h2 id="showCity"></h2>
+      <div id="showCurrent"></div>
+    </div>
+    <!-- 5DAYS FORECAST -->
+    <div>
+      <h2>5-Day Forecast:</h2>
+    </div>
 
     <script
       type="text/javascript"
