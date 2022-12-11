@@ -8,12 +8,13 @@ var showCurrent = document.getElementById("showCurrent");
 
 //get weather data
 function getWeather() {
+  //clearn when
   showCurrent.innerHTML = "";
   var APIKey = "7341266ecd1c2b76f83a4d7e336244b2";
   var baseURL =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityEl.value +
-    "&appid=" +
+    "&units=imperial&appid=" +
     APIKey;
 
   fetch(baseURL)
@@ -22,10 +23,14 @@ function getWeather() {
     })
 
     .then(function (data) {
-      var temp = "Temp: " + data.main.temp + "F";
+      console.log(data);
+      console.log(todayDate);
+      console.log(data.dt);
+      var temp = "Temp: " + data.main.temp + "°F";
       var wind = "Wind: " + data.wind.speed + " MPH";
-      var humidity = "Humidity: " + data.main.humidity + "%";
-      showCity.innerHTML = data.name;
+      var humidity = "Humidity: " + data.main.humidity + " %";
+      showCity.innerHTML =
+        data.name + " (" + moment(data.dt_txt).format("MM/DD/YYYY") + ")";
       var liEl = document.createElement("li");
       liEl.append(temp);
       showCurrent.appendChild(liEl);
@@ -38,15 +43,6 @@ function getWeather() {
       liEl.append(humidity);
       showCurrent.appendChild(liEl);
     });
-}
-
-//show current data
-function showCurrent(data) {
-  console.log(data);
-  console.log(data.name);
-  console.log("Temp: " + data.main.temp + "F");
-  console.log("Wind: " + data.wind.speed + " MPH");
-  console.log("Humidity: " + data.main.humidity + "%");
 }
 
 //when user click search
