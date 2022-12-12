@@ -6,6 +6,8 @@ var searchEl = document.getElementById("searchButton");
 var showCity = document.getElementById("showCity");
 var showCurrent = document.getElementById("showCurrent");
 var showFiveday = document.getElementById("showFiveday");
+var searchHistory = document.getElementById("searchHistory");
+var cities = [];
 let lon = 0;
 let lat = 0;
 
@@ -26,8 +28,13 @@ function getWeather() {
 
     .then(function (data) {
       //get location:lon&lat
+
       lon = data.coord.lon;
       lat = data.coord.lat;
+
+      searchedEl = document.createElement("button");
+      searchedEl.append(data.name);
+      searchHistory.appendChild(searchedEl);
 
       var temp = "Temp: " + data.main.temp + "°F";
       var wind = "Wind: " + data.wind.speed + " MPH";
@@ -87,6 +94,12 @@ function getFiveDayForecast() {
         showFiveday.appendChild(liEl);
       }
     });
+}
+
+//search history
+function searchHistory(cityName) {
+  searchedEl = document.createElement("button");
+  searchedEl.innerHTML(cityName);
 }
 
 //when user click search
