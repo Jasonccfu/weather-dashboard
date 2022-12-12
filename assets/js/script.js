@@ -5,12 +5,14 @@ var cityEl = document.getElementById("cityName");
 var searchEl = document.getElementById("searchButton");
 var showCity = document.getElementById("showCity");
 var showCurrent = document.getElementById("showCurrent");
+var showFiveday = document.getElementById("showFiveday");
+let lon = 0;
+let lat = 0;
 
 //get weather data
 function getWeather() {
-  //clearn when
+  //clear previous when recall
   showCurrent.innerHTML = "";
-  var APIKey = "7341266ecd1c2b76f83a4d7e336244b2";
   var baseURL =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityEl.value +
@@ -23,9 +25,10 @@ function getWeather() {
     })
 
     .then(function (data) {
-      console.log(data);
-      console.log(todayDate);
-      console.log(data.dt);
+      //get location:lon&lat
+      lon = data.coord.lon;
+      lat = data.coord.lat;
+
       var temp = "Temp: " + data.main.temp + "°F";
       var wind = "Wind: " + data.wind.speed + " MPH";
       var humidity = "Humidity: " + data.main.humidity + " %";
@@ -42,6 +45,47 @@ function getWeather() {
       var liEl = document.createElement("li");
       liEl.append(humidity);
       showCurrent.appendChild(liEl);
+      //get 5-daysforecast
+      getFiveDayForecast();
+    });
+}
+
+function getFiveDayForecast() {
+  //clear previous when recall
+  showFiveday.innerHTML = "";
+  var forecastURL =
+    "https://api.openweathermap.org/data/2.5/forecast?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&units=imperial&appid=" +
+    APIKey;
+
+  fetch(forecastURL)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      console.log(data.list);
+      //for loop to show next five days
+      // i = per 3 hrs , so i + 8 for next 24 hours.
+      for (var i = 5; i < data.list.length; i = i + 8) {
+        var h2El = document.createElement("h2");
+        h2El.append(moment(data.list[i].dt_txt).format("MM/DD/YYYY"));
+        showFiveday.appendChild(h2El);
+
+        var liEl = document.createElement("li");
+        liEl.append("Temp: " + data.list[i].main.temp + "°F");
+        showFiveday.appendChild(liEl);
+
+        var liEl = document.createElement("li");
+        liEl.append("Wind: " + data.list[i].wind.speed + " MPH");
+        showFiveday.appendChild(liEl);
+
+        var liEl = document.createElement("li");
+        liEl.append("Humidity: " + data.list[i].main.humidity + " %");
+        showFiveday.appendChild(liEl);
+      }
     });
 }
 
