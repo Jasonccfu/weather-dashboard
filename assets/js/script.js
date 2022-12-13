@@ -6,7 +6,9 @@ var searchEl = document.getElementById("searchButton");
 var showCity = document.getElementById("showCity");
 var showCurrent = document.getElementById("showCurrent");
 var showFiveday = document.getElementById("showFiveday");
-var searchHistory = document.getElementById("searchHistory");
+var historySearch = document.getElementById("historySearch");
+var list = document.getElementById("list");
+
 var cities = [];
 let lon = 0;
 let lat = 0;
@@ -30,10 +32,14 @@ function getWeather() {
       //get location:lon&lat
       lon = data.coord.lon;
       lat = data.coord.lat;
+      //save cityName to localstorage
+      localStorage.setItem("cities", JSON.stringify(data.name));
+      // pastSearch(data.name);
 
       searchedEl = document.createElement("button");
       searchedEl.append(data.name);
-      searchHistory.appendChild(searchedEl);
+      historySearch.appendChild(searchedEl);
+
       var img = data.weather[0].icon;
       var temp = "Temp: " + data.main.temp + "°F";
       var wind = "Wind: " + data.wind.speed + " MPH";
@@ -84,9 +90,15 @@ function getFiveDayForecast() {
       //for loop to show next five days
       // i = per 3 hrs , so i + 8 for next 24 hours.
       for (var i = 5; i < data.list.length; i = i + 8) {
-        var h2El = document.createElement("h2");
-        h2El.append(moment(data.list[i].dt_txt).format("MM/DD/YYYY"));
-        showFiveday.appendChild(h2El);
+        var div = document.createElement("div");
+        div.classList = "text-center bg-light p-2";
+
+        var div2 = document.createElement("div");
+        div.classList = "card-subtitle mb-2 text-muted";
+
+        var date = document.createElement("h5");
+        date.append(moment(data.list[i].dt_txt).format("MM/DD/YYYY"));
+        data.classList = "card-title";
 
         var img = data.list[i].weather[0].icon;
         var weatherIcon = document.createElement("img");
@@ -94,29 +106,38 @@ function getFiveDayForecast() {
           "src",
           "https://openweathermap.org/img/wn/" + img + ".png"
         );
-        showFiveday.appendChild(weatherIcon);
+        weatherIcon.classList = "card-subtitle mb-2 text-muted";
 
-        var divEl = document.createElement("div");
-        divEl.append("Temp: " + data.list[i].main.temp + "°F");
-        showFiveday.appendChild(divEl);
+        var temp = document.createElement("div");
+        temp.append("Temp: " + data.list[i].main.temp + "°F");
+        temp.classList = "list-group-item";
 
-        var divEl = document.createElement("div");
-        divEl.append("Wind: " + data.list[i].wind.speed + " MPH");
-        showFiveday.appendChild(divEl);
+        var wind = document.createElement("div");
+        wind.append("Wind: " + data.list[i].wind.speed + " MPH");
+        wind.classList = "list-group-item";
 
-        var divEl = document.createElement("div");
-        divEl.append("Humidity: " + data.list[i].main.humidity + " %");
-        showFiveday.appendChild(divEl);
+        var humidity = document.createElement("div");
+        humidity.append("Humidity: " + data.list[i].main.humidity + " %");
+        humidity.classList = "list-group-item";
+
+        showFiveday.appendChild(div);
+        div.appendChild(div2);
+        div.appendChild(date);
+        div.appendChild(weatherIcon);
+        div.appendChild(temp);
+        div.appendChild(wind);
+        div.appendChild(humidity);
       }
     });
 }
 
-//search history
-function searchHistory(text) {
-  var his = text;
-  console.log(text);
-}
+//start
 
 //when user click search
 searchEl.addEventListener("click", getWeather);
-// searchedEl.addEventListener("click", searchHistory(button.textContent));
+
+//clear historySearch
+$("#cityClearnButton").on("click", function () {
+  localStorage.clear();
+  $("#historySearch").remove();
+});
