@@ -10,7 +10,7 @@ URL:https://jasonccfu.github.io/weather-dashboard/
 
 ## Usage
 
-![alt text](.assets/img/image.png "my screenshot")
+![alt text](assets/img/image.png "my screenshot")
 
 ## Credits
 
